@@ -12,7 +12,6 @@ import java.io.Closeable;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @ToString
-@Component
 public class SessionCreator implements Closeable {
 
     private final SessionFactory sessionFactory;

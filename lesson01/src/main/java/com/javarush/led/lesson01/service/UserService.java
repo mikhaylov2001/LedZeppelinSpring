@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 @AllArgsConstructor
 @ToString
-@Service
 public class UserService {
     private final UserRepository userRepository;
 }

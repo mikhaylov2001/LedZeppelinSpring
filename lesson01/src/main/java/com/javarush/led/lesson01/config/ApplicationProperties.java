@@ -16,7 +16,6 @@ import java.util.Properties;
 
 @Slf4j
 @ToString
-@Component
 public class ApplicationProperties extends Properties {
 
     public static final String HIBERNATE_CONNECTION_URL = "hibernate.connection.url";

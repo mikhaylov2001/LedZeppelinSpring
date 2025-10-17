@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 
 @AllArgsConstructor
 @ToString
-@Repository
 public class UserRepository {
     private final SessionCreator sessionCreator;
 }
