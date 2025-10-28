@@ -6,7 +6,7 @@ import com.javarush.led.lesson03.service.UserService;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-public class App02 {
+public class App03 {
 
 
     public static void main(String[] args) {
