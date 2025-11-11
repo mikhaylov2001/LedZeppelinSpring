@@ -1,0 +1,30 @@
+package com.javarush.led.lesson08.model.editor;
+
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.mapstruct.Mapper;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.util.*;
+
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class Editor {
+
+    Long id;
+    String login;
+    String password;
+    String firstname;
+    String lastname;
+
+
+}
