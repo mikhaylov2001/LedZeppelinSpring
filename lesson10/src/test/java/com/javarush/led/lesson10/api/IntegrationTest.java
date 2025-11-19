@@ -1,12 +1,12 @@
 package com.javarush.led.lesson10.api;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
+import org.springframework.core.env.Environment;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestConstructor;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,9 +37,9 @@ public @interface IntegrationTest {
         @Bean
         @ServiceConnection //replace @DynamicProperties
         public PostgreSQLContainer<?> postgresContainer(
-                @Value("${" + POSTGRES_CONTAINER_NAME + "?:" + DEFAULT_POSTGRES + "}")
-                String dockerTestcontainersImageName
+                Environment environment
         ) {
+            var dockerTestcontainersImageName = environment.getProperty(POSTGRES_CONTAINER_NAME, DEFAULT_POSTGRES);
             return new PostgreSQLContainer<>(dockerTestcontainersImageName);
         }
     }
