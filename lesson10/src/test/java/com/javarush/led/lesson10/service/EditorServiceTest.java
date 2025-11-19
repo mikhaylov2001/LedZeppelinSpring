@@ -138,7 +138,7 @@ public class EditorServiceTest {
     @Test
     void updateShouldReturnEditorOutOnSuccess() {
         when(mapper.in(mockIn)).thenReturn(mockEntity);
-        when(repoImpl.update(mockEntity)).thenReturn(Optional.of(mockEntity));
+        when(repoImpl.update(mockEntity.getId(), mockEntity)).thenReturn(Optional.of(mockEntity));
         when(mapper.out(mockEntity)).thenReturn(mockOut);
 
         EditorOut actual = editorService.update(mockIn);
@@ -147,7 +147,7 @@ public class EditorServiceTest {
         assertEquals(mockOut, actual);
 
         verify(mapper, times(1)).in(mockIn);
-        verify(repoImpl, times(1)).update(mockEntity);
+        verify(repoImpl, times(1)).update(mockEntity.getId(), mockEntity);
         verify(mapper, times(1)).out(mockEntity);
     }
 

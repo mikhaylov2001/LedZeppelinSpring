@@ -1,9 +1,9 @@
 package com.javarush.led.lesson10.service;
 
+import com.javarush.led.lesson10.mapper.EditorDto;
 import com.javarush.led.lesson10.model.editor.EditorIn;
 import com.javarush.led.lesson10.model.editor.EditorOut;
 import com.javarush.led.lesson10.repository.EditorRepo;
-import com.javarush.led.lesson10.mapper.EditorDto;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,7 +44,7 @@ public class EditorService {
     @Transactional
     public EditorOut update(EditorIn input) {
         return editorRepo
-                .update(mapper.in(input))
+                .update(input.getId(), mapper.in(input))
                 .map(mapper::out)
                 .orElseThrow();
     }

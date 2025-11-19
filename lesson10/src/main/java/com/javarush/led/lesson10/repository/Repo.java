@@ -41,9 +41,11 @@ public interface Repo<T> extends CrudRepository<T, Long> {
      * Использует save() из CrudRepository.
      * В реальной жизни здесь требуется дополнительная логика проверки существования.
      */
-    default Optional<T> update(T input) {
-        T updated = save(input);
-        return Optional.of(updated);
+    default Optional<T> update(Long id, T input) {
+        if (id != null && existsById(id)) {
+            T updated = save(input);
+            return Optional.of(updated);
+        } else return Optional.empty();
     }
 
     /**

@@ -40,7 +40,7 @@ public class NoteService {
 
     public NoteOut update(NoteIn input) {
         return noteRepo
-                .update(mapper.in(input))
+                .update(input.getId(), mapper.in(input))
                 .map(mapper::out)
                 .orElseThrow();
     }

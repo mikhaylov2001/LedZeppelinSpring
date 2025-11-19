@@ -41,7 +41,7 @@ public class TagService {
 
     public TagOut update(TagIn input) {
         return tagRepo
-                .update(mapper.in(input))
+                .update(input.getId(), mapper.in(input))
                 .map(mapper::out)
                 .orElseThrow();
     }

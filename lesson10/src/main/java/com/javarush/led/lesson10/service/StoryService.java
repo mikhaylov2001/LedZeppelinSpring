@@ -40,7 +40,7 @@ public class StoryService {
 
     public StoryOut update(StoryIn input) {
         return storyRepo
-                .update(mapper.in(input))
+                .update(input.getId(), mapper.in(input))
                 .map(mapper::out)
                 .orElseThrow();
     }

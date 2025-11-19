@@ -100,6 +100,8 @@ public class EditorServiceIT{
 
     @Test
     void updateShouldReturnEditorOutOnSuccess() {
+        EditorOut editorOut = editorService.create(editorIn);
+        editorIn.setId(editorOut.getId());
         EditorOut actual = editorService.update(editorIn);
         assertNotNull(actual);
         assertEquals(editorIn.getLogin(), actual.getLogin());

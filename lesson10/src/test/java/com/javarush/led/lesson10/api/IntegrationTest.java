@@ -1,6 +1,7 @@
 package com.javarush.led.lesson10.api;
 
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
@@ -21,6 +22,7 @@ import java.lang.annotation.*;
 
 @SpringBootTest
 @ActiveProfiles("test")
+@AutoConfigureMockMvc
 @Transactional
 @TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
 //include testcontainers in annotation.
@@ -32,15 +34,13 @@ public @interface IntegrationTest {
     class PostgresTestContainer {
 
         public static final String POSTGRES_CONTAINER_NAME = "postgres.container.name";
-        public static final String DEFAULT_POSTGRES = "postgres:16";
+        public static final String DEFAULT_POSTGRES = "postgres:latest";
 
         @Bean
         @ServiceConnection //replace @DynamicProperties
-        public PostgreSQLContainer<?> postgresContainer(
-                Environment environment
-        ) {
-            var dockerTestcontainersImageName = environment.getProperty(POSTGRES_CONTAINER_NAME, DEFAULT_POSTGRES);
-            return new PostgreSQLContainer<>(dockerTestcontainersImageName);
+        public PostgreSQLContainer<?> postgresContainer(Environment environment) {
+            String postgresContainerName = environment.getProperty(POSTGRES_CONTAINER_NAME, DEFAULT_POSTGRES);
+            return new PostgreSQLContainer<>(postgresContainerName);
         }
     }
 }
