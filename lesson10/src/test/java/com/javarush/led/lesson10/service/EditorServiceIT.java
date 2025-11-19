@@ -1,6 +1,6 @@
 package com.javarush.led.lesson10.service;
 
-import com.javarush.led.lesson10.api.TestEnv;
+import com.javarush.led.lesson10.api.IntegrationTest;
 import com.javarush.led.lesson10.model.editor.Editor;
 import com.javarush.led.lesson10.model.editor.EditorIn;
 import com.javarush.led.lesson10.model.editor.EditorOut;
@@ -16,26 +16,16 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@IntegrationTest
 @RequiredArgsConstructor
-public class EditorServiceIT extends TestEnv {
+public class EditorServiceIT{
 
     private final EditorService editorService;
-
-    private final Long TEST_ID = 11L;
-
-    private EditorOut mockOut;
-    private EditorIn mockIn;
+    private EditorIn editorIn;
 
     @BeforeEach
     void setUp() {
-
-        mockOut = EditorOut.builder()
-                .login("test_user")
-                .firstname("Test")
-                .lastname("User")
-                .build();
-
-        mockIn = EditorIn.builder()
+        editorIn = EditorIn.builder()
                 .login("new_user")
                 .password("new_secure_pass123")
                 .firstname("New")
@@ -43,10 +33,7 @@ public class EditorServiceIT extends TestEnv {
                 .build();
     }
 
-    // --- Параметрический тест для CREATE ---
-
     private static Stream<Arguments> creationTestData() {
-        // Scenario 1: New Editor
         EditorIn input1 = EditorIn.builder()
                 .login("john.doe")
                 .password("strongPassword!1")
@@ -67,7 +54,6 @@ public class EditorServiceIT extends TestEnv {
                 .lastname("Doe")
                 .build();
 
-        // Scenario 2: Another New Editor
         EditorIn input2 = EditorIn.builder()
                 .login("alice_w")
                 .password("AlicePass321")
@@ -97,10 +83,7 @@ public class EditorServiceIT extends TestEnv {
     @ParameterizedTest(name = "Create with login: {0}")
     @MethodSource("creationTestData")
     void createShouldReturnEditorOutOnSuccessParameterized(EditorIn input, Editor entity, EditorOut expectedOut) {
-
-
         EditorOut actual = editorService.create(input);
-
         assertNotNull(actual);
         assertEquals(expectedOut.getLogin(), actual.getLogin());
         assertEquals(expectedOut.getFirstname(), actual.getFirstname());
@@ -110,29 +93,23 @@ public class EditorServiceIT extends TestEnv {
 
     @Test
     void getShouldReturnEditorOutForValidId() {
-        EditorOut editorOut = editorService.create(mockIn);
+        EditorOut editorOut = editorService.create(editorIn);
         EditorOut actual = editorService.get(editorOut.getId());
         assertNotNull(actual);
     }
 
-    // --- Тест для UPDATE (используем mockIn/mockEntity/mockOut из setup) ---
-
     @Test
     void updateShouldReturnEditorOutOnSuccess() {
-        EditorOut actual = editorService.update(mockIn);
-
+        EditorOut actual = editorService.update(editorIn);
         assertNotNull(actual);
-        assertEquals(mockIn.getLogin(), actual.getLogin());
-        assertEquals(mockIn.getFirstname(), actual.getFirstname());
-        assertEquals(mockIn.getLastname(), actual.getLastname());
+        assertEquals(editorIn.getLogin(), actual.getLogin());
+        assertEquals(editorIn.getFirstname(), actual.getFirstname());
+        assertEquals(editorIn.getLastname(), actual.getLastname());
 
     }
 
-    // --- Другие тесты ---
-
     @Test
     void getAllShouldReturnListOfEditorOut() {
-
         List<EditorOut> actual = editorService.getAll();
         assertNotNull(actual);
 
@@ -140,14 +117,12 @@ public class EditorServiceIT extends TestEnv {
 
     @Test
     void getShouldThrowExceptionForInvalidId() {
-
         assertThrows(java.util.NoSuchElementException.class, () -> editorService.get(1234567890L));
-
     }
 
     @Test
     void deleteShouldReturnTrueOnSuccess() {
-        EditorOut editorOut = editorService.create(mockIn);
+        EditorOut editorOut = editorService.create(editorIn);
         boolean actual = editorService.delete(editorOut.getId());
         assertTrue(actual);
     }
