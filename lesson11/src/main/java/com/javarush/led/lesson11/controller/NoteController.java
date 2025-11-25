@@ -11,7 +11,6 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.Collection;
 import java.util.NoSuchElementException;
 
-@RestController
 @RequestMapping("api/v1.0/notes")
 public class NoteController {
 

@@ -71,6 +71,16 @@
             <artifactId>mapstruct</artifactId>
             <version>1.5.3.Final</version>
         </dependency>
+        <dependency>
+            <!-- http://localhost:24130/swagger-ui.html
+            springdoc.swagger-ui.enabled=true (default true)
+            springdoc.api-docs.enabled=true   (default true)
+            -->
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>2.3.0</version>
+        </dependency>
+
     </dependencies>
 
     <build>
