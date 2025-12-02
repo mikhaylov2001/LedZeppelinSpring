@@ -1,0 +1,19 @@
+spring:
+  liquibase:
+    url: jdbc:cassandra://localhost:9042/distcomp?compliancemode=Liquibase&localdatacenter=datacenter1
+    change-log: classpath:db/changelog/changelog-master.xml
+    driver-class-name: com.ing.data.cassandra.jdbc.CassandraDriver
+
+  datasource: # @Bean Liquibase find CqlSession in context
+    name: cassandra_datasource
+    url: jdbc:cassandra://localhost:9042/distcomp?localdatacenter=datacenter1
+    driver-class-name: com.ing.data.cassandra.jdbc.CassandraDriver
+    #hikari.minimum-idle: 1
+
+  cassandra:
+    keyspace-name: distcomp
+    local-datacenter: datacenter1
+    port: 9042
+
+server:
+  port: 24130
