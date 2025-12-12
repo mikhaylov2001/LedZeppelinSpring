@@ -1,0 +1,65 @@
+<!doctype html>
+<html th:lang="${#locale}" lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:insert="~{fragments::head}">
+    <title>Title for replace</title>
+</head>
+<body>
+<div class="container">
+    <span th:insert="~{fragments::menu}"></span>
+    <fieldset>
+        <!-- Form Name -->
+        <legend>User page</legend>
+        <!-- Text input-->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="login">Login</label>
+            <div class="col-md-4">
+                <input id="login" name="login" th:value="${user!=null?user.login:''}" value="user.login"
+                       type="text" placeholder="" class="form-control input-md" required="">
+            </div>
+        </div>
+
+        <!-- Password input-->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="password">Password</label>
+            <div class="col-md-4">
+                <input id="password" name="password" th:value="${user!=null?user.password:''}" value="user.password"
+                       type="password" placeholder="" class="form-control input-md"
+                       required="">
+            </div>
+        </div>
+        <input type="hidden" th:value="${user!=null?user.id:''}">
+
+        <!-- Button (Double) -->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="operation">Operation</label>
+            <div id="operation" class="col-md-8" th:switch="${user}">
+                        <span th:case="${null}">
+                            <button name="operation" class="btn btn-danger" value="create">Create</button>
+                            <button name="operation" class="btn btn-primary" value="login">Login</button>
+                        </span>
+                <span th:case="*">
+                            <button name="operation" class="btn btn-success" value="update">Update</button>
+                            <button name="operation" class="btn btn-danger" value="delete">Delete</button>
+                        </span>
+            </div>
+        </div>
+    </fieldset>
+    </form>
+
+
+    <h2>List users</h2>
+    <div th:each="user : ${users}">
+        <div>
+            <a th:href="@{|/users/${user.id}|}">Edit</a>
+            <span th:text="${user.login}">User Role</span>
+        </div>
+    </div>
+
+    <p><br><a href="/users">Reset</a></p>
+
+    <div th:insert="~{fragments::footer}">
+        Footer
+    </div>
+</div>
+</body>
+</html>
