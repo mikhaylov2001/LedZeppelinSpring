@@ -1,25 +1,39 @@
 package com.javarush.lesson17.config;
 
 import com.javarush.lesson17.entity.Role;
+import com.javarush.lesson17.service.AuthService;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
+import java.util.Set;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 public class AppSecurityConfig {
+
+    private final AuthService authService;
+
+    public AppSecurityConfig(AuthService authService) {
+        this.authService = authService;
+    }
 
     @Bean
     @Order(SecurityProperties.BASIC_AUTH_ORDER)
@@ -47,19 +61,40 @@ public class AppSecurityConfig {
                         .defaultSuccessUrl("/users", true)
                         .failureUrl("/login?error")
                 )
+                .oauth2Login(o2l -> o2l
+                        .loginPage("/login")
+                        .authorizationEndpoint(ae->ae.baseUri("/oauth"))
+                        .successHandler(getSuccessHandler())
+                )
+                .logout(logoutConfig -> logoutConfig
+                        .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET"))
+                        .logoutSuccessUrl("/login?logout=true"))
                 .build();
     }
 
 
-//    @Bean
-//    public InMemoryUserDetailsManager inMemoryUserDetailsManager(SecurityProperties properties,
-//                                                                 ObjectProvider<PasswordEncoder> passwordEncoder) {
-//        UserDetails carl = User.withUsername("Carl")
-//                .password("{bcrypt}$2a$10$4OlZHUW/ykpj/UQd498K9uL2hd0ox3YQRJgFa4R0FxxxqE5RwEEwu")
-//                .roles("ADMIN", "USER")
-//                .build();
-//        return new InMemoryUserDetailsManager(carl);
-//    }
+    private AuthenticationSuccessHandler getSuccessHandler() {
+        return (request, response, authentication) -> {
+            DefaultOAuth2User oAuth2User = (DefaultOAuth2User) authentication.getPrincipal();
+            Set<String> targetAttributes = Set.of("preferred_username", "login", "email");
+            String login = oAuth2User.getAttributes()
+                    .entrySet()
+                    .stream()
+                    .filter(entry -> targetAttributes.contains(entry.getKey()))
+                    .map(e -> e.getValue().toString().replaceAll("@.*", ""))
+                    .findFirst()
+                    .orElseThrow(() -> new RuntimeException("Attribute not found"));
+            UserDetails userDetails = authService.loadUserByUsername(login);
+            SecurityContextHolder.getContext().setAuthentication(
+                    new UsernamePasswordAuthenticationToken(
+                            userDetails, null, userDetails.getAuthorities()
+                    )
+            );
+            response.sendRedirect("/users");
+        };
+    }
+
+
 
     @Bean
     PasswordEncoder passwordEncoder() {

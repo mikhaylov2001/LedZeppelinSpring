@@ -1,0 +1,36 @@
+
+#spring.liquibase.change-log=db/changelog/changelog-master.xml
+
+spring:
+  datasource:
+      url: jdbc:postgresql://localhost:5432/game
+      username: postgres
+      password: postgres
+  security:
+    oauth2:
+      client:
+        provider:
+          keycloak:
+            issuer-uri: http://localhost:8443/realms/jru
+            user-name-attribute: preferred_username
+        registration:
+          keycloak:
+            client-id: app-edit-user
+            client-secret: FZgcObX5yWkDIudxdboYcZrK83bS6WGk
+            redirect-uri: http://localhost:8080/login/oauth2/code/keycloak
+
+          scope:
+            - openid
+            - edit-user
+            - microprofile-jwt
+
+          github:
+            client-id: Ov23lijRyL1bHqt9pUOo
+            client-secret: 4ba54003abff5448eb2085e50aeb29aebd1f13d0
+
+
+logging:
+  level:
+    root: INFO
+    springfox: INFO
+

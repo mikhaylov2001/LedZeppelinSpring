@@ -15,7 +15,7 @@ public class AuthService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        var userInDb = repo.findByLogin(username);
+        var userInDb = repo.findByLoginIgnoreCase(username);
         return User.withUsername(userInDb.getLogin())
                 .password(userInDb.getPassword())
                 .roles(userInDb.getRole().getRole())
