@@ -8,6 +8,9 @@ spring:
       password: postgres
   security:
     oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://host.docker.internal:8443/realms/jru
       client:
         provider:
           keycloak:
@@ -34,3 +37,10 @@ logging:
     root: INFO
     springfox: INFO
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - health
+          - prometheus

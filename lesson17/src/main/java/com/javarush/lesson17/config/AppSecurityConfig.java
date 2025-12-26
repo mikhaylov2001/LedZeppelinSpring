@@ -36,6 +36,20 @@ public class AppSecurityConfig {
     }
 
     @Bean
+    @Order(1)
+    public SecurityFilterChain apiSecurityFilterChain(HttpSecurity http) throws Exception {
+        return http
+                .securityMatcher("/actuator/**")
+                .csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(auth -> auth
+                        .anyRequest()
+                        .hasAuthority("SCOPE_metrics")
+                )
+                .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> {}))
+                .build();
+    }
+
+    @Bean
     @Order(SecurityProperties.BASIC_AUTH_ORDER)
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
         return http
