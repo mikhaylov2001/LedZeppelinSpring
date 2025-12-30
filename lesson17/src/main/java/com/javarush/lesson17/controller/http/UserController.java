@@ -23,6 +23,12 @@ public class UserController {
 
     private final UserService userService;
 
+
+    @GetMapping("/th")
+    public String th(){
+        throw new RuntimeException("ho-ho!!!");
+    }
+
     @GetMapping()
     public ModelAndView showAllUsers(ModelAndView view, Principal principal) {
         view.addObject("users", userService.findAll());

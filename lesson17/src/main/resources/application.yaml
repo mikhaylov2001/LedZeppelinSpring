@@ -2,6 +2,8 @@
 #spring.liquibase.change-log=db/changelog/changelog-master.xml
 
 spring:
+  application:
+    name: lesson20-name
   datasource:
       url: jdbc:postgresql://localhost:5432/game
       username: postgres
@@ -36,7 +38,6 @@ logging:
   level:
     root: INFO
     springfox: INFO
-
 management:
   endpoints:
     web:
@@ -44,3 +45,9 @@ management:
         include:
           - health
           - prometheus
+  tracing:
+    sampling:
+      probability: 1.0 # 1.0 = 100% трейсов (для dev), 0.1 для prod
+  zipkin:
+    tracing:
+      endpoint: http://localhost:9411/api/v2/spans
