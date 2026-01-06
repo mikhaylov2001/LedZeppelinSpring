@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:fragment="head">
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -16,8 +16,6 @@
         Language
         <a href=".?lang=en">EN</a>
         <a href=".?lang=ru">RU</a>
-    <span sec:authorize="isAuthenticated()">
-        <a href="/logout" th:text="|Logout ${principalName}|">Logout</a>
     </span>
 
 <div th:fragment="footer">
@@ -29,3 +27,8 @@
             integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V"
             crossorigin="anonymous"></script>
 </div>
+
+
+</body>
+
+</html>
