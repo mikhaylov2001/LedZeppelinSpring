@@ -1,0 +1,53 @@
+
+#spring.liquibase.change-log=db/changelog/changelog-master.xml
+
+spring:
+  application:
+    name: lesson20-name
+  datasource:
+      url: jdbc:postgresql://localhost:5432/game
+      username: postgres
+      password: postgres
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://host.docker.internal:8443/realms/jru
+      client:
+        provider:
+          keycloak:
+            issuer-uri: http://localhost:8443/realms/jru
+            user-name-attribute: preferred_username
+        registration:
+          keycloak:
+            client-id: app-edit-user
+            client-secret: FZgcObX5yWkDIudxdboYcZrK83bS6WGk
+            redirect-uri: http://localhost:8080/login/oauth2/code/keycloak
+
+            scope:
+              - openid
+              - edit-user
+              - microprofile-jwt
+
+          github:
+            client-id: Ov23lijRyL1bHqt9pUOo
+            client-secret: 4ba54003abff5448eb2085e50aeb29aebd1f13d0
+
+
+logging:
+  level:
+    root: INFO
+    springfox: INFO
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - health
+          - prometheus
+  tracing:
+    sampling:
+      probability: 1.0 # 1.0 = 100% трейсов (для dev), 0.1 для prod
+  zipkin:
+    tracing:
+      endpoint: http://localhost:9411/api/v2/spans

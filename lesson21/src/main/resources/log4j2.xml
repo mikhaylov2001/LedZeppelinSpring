@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+<!--               packages="pl.tkowalcz.tjahzi.log4j2"-->
+
+    <Properties>
+       <Property name="SPRING"
+                  value="%style{%d{ISO8601}}{black} %highlight{%-5level }[%style{%t}{bright,blue}] %style{%C{1.}}{bright,yellow}.%M(%F:%L): %msg%n%throwable"/>
+    </Properties>
+
+    <Appenders>
+
+        <Console name="SpringConsole" target="SYSTEM_OUT">
+            <PatternLayout pattern="${sys:SPRING}"/>
+        </Console>
+
+<!--        <Loki name="Loki" host="host.docker.internal" port="3100">-->
+<!--            <Label name="app" value="lesson20"/>-->
+<!--            <Label name="env" value="dev"/>-->
+<!--            <PatternLayout pattern="level=%level %m%n"/>-->
+<!--        </Loki>-->
+
+        <RollingFile name="File"
+                     fileName=".log/app.log"
+                     filePattern=".log/app-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout pattern="level=%level %m%n"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="10MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="5"/>
+        </RollingFile>
+    </Appenders>
+
+    <Loggers>
+        <Root level="INFO">
+            <AppenderRef ref="SpringConsole"/>
+<!--            <AppenderRef ref="Loki"/>-->
+            <AppenderRef ref="File"/>
+        </Root>
+    </Loggers>
+</Configuration>
