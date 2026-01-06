@@ -1,0 +1,54 @@
+<!doctype html>
+<html th:lang="${#locale}" lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:insert="~{fragments::head}">
+    <title>Title for replace</title>
+</head>
+<body>
+<div class="container">
+    <span th:insert="~{fragments::menu}"></span>
+
+    <form th:action="@{/login}" method="post" class="form-horizontal">
+        <fieldset>
+
+            <!-- Form Name -->
+            <legend th:text="#{user_form.title}">User page</legend>
+            <!-- Text input-->
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="login" th:text="#{user_form.login}">Login</label>
+                <div class="col-md-4">
+                    <input id="login" name="login" th:value="${user!=null?user.login:'Carl'}" value="user.login"
+                           type="text" placeholder="" class="form-control input-md" required="">
+                </div>
+            </div>
+
+            <!-- Password input-->
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="password" th:text="#{user_form.password}">Password</label>
+                <div class="col-md-4">
+                    <input id="password" name="password" th:value="${user!=null?user.password:'admin'}"
+                           value="user.password"
+                           type="password" placeholder="" class="form-control input-md"
+                           required="">
+                </div>
+            </div>
+
+            <!-- Button (Double) -->
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="loginUser" th:text="#{user_form.operation}">Operation</label><br>
+                <button type="submit" id="loginUser" name="loginUser" class="btn btn-primary">Login</button>
+            </div>
+        </fieldset>
+    </form>
+
+    Login with
+    <a href="/oauth/keycloak">Keycloak</a>
+    <a href="/oauth/github">GitHub</a>
+    <a href="/oauth/google">Google</a>
+
+
+    <div th:insert="~{fragments::footer}">
+        Footer
+    </div>
+</div>
+</body>
+</html>

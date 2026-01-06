@@ -1,0 +1,82 @@
+<!doctype html>
+<html th:lang="${#locale}" lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:insert="~{fragments::head}">
+    <title>Title for replace</title>
+</head>
+<body>
+<div class="container">
+    <span th:insert="~{fragments::menu}"></span>
+
+    <form method="post" class="form-horizontal">
+        <fieldset>
+
+            <!-- Form Name -->
+            <legend th:text="#{user_form.title}">User page</legend>
+            <!-- Text input-->
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="login" th:text="#{user_form.login}">Login</label>
+                <div class="col-md-4">
+                    <input id="login" name="login" th:value="${user!=null?user.login:''}" value="user.login"
+                           type="text" placeholder="" class="form-control input-md" required="">
+                </div>
+            </div>
+
+            <!-- Password input-->
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="password" th:text="#{user_form.password}">Password</label>
+                <div class="col-md-4">
+                    <input id="password" name="password" th:value="${user!=null?user.password:''}" value="user.password"
+                           type="password" placeholder="" class="form-control input-md"
+                           required="">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="role" th:text="#{user_form.role}">Role</label>
+                <div class="col-md-4">
+                    <select id="role" name="role" class="form-control" th:required="${user!=null}">
+                        <option th:each="role : ${roles}"
+                                th:text="${role}"
+                                th:selected="${(user != null and user.role != null and user.role == role)
+                                               or (user == null and role.name == 'USER')}">
+                        </option>
+                    </select>
+                </div>
+            </div>
+
+            <input type="hidden" th:value="${user!=null?user.id:''}">
+
+            <!-- Button (Double) -->
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="operation" th:text="#{user_form.operation}">Operation</label>
+                <div id="operation" class="col-md-8" th:switch="${user}">
+
+                        <span th:case="${null}">
+                            <button name="createUser" class="btn btn-danger">Create</button>
+                            <button name="loginUser" class="btn btn-primary">Login</button>
+                        </span>
+                    <span th:case="*">
+                            <button name="updateUser" class="btn btn-success">Update</button>
+                            <button name="deleteUser" class="btn btn-danger">Delete</button>
+                        </span>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+
+
+    <h2 th:text="#{user_page.list_users}">List users</h2>
+    <div th:each="user : ${users}">
+        <div>
+            <a th:href="@{|/users/${user.id}|}" th:text="#{user_page.edit_link(${user.id})}">Edit</a> <span
+                th:text="${user.login}">User Role</span>
+        </div>
+    </div>
+
+    <p><br><a href="/users" th:text="#{user_page.reset_link}">Reset</a></p>
+
+    <div th:insert="~{fragments::footer}">
+        Footer
+    </div>
+</div>
+</body>
+</html>
